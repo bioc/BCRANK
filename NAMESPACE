@@ -1,0 +1,20 @@
+useDynLib(BCRANK)
+import(methods)
+importFrom(Biostrings,readFASTA)
+importFrom(graphics,plot)
+
+exportClasses(BCRANKmatch,
+              BCRANKsearch,
+              BCRANKresult)
+
+export(bcrank)
+
+exportMethods(show,
+              toptable,
+              fname,
+              searchPath,
+              pwm,
+              plot,
+              bcrankScore,
+              consensus,
+              matchVector)
