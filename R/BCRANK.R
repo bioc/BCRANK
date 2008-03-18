@@ -111,13 +111,6 @@ seqFromFile <- function(fafile){
   return(seqs)
 }
 
-## Outputs the progress of some process.
-statusReport <- function(nrComplete, nrTotal, msg, statusLength=20){
-  ratio <- nrComplete/nrTotal
-  percentDone <- round(100*ratio)
-  cat("\r",msg,": ",percentDone,"%\r",sep="")
-}
-
 
 ## Creates a position weight matrix (PWM) given sequences and a
 ## IUPAC consensus sequence. 
@@ -254,10 +247,14 @@ hitsForNeighboursInC <- function(seqs, consensus, nrSeqs, seqLengths, silent){
 
   consLength <- nchar(consensus)
   hits <- list()
+
+  if(!silent){
+    cat("Scanning sequences")
+  }
   
   for(basePos in 1:consLength){
     if(!silent){
-      statusReport(basePos,consLength, " Scanning sequences", statusLength=consLength)
+      cat(".")
     }
     hits <- append(hits,hitsForNeighboursByBase(seqs,consensus,basePos,nrSeqs,seqLengths))
   }
@@ -447,6 +444,10 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
       
       nrNeigh <- length(hitsNeigh)
       nrDone <- 0
+
+      if(!silent){
+        cat("Computing scores")
+      }
       
       for(consensus in names(hitsNeigh)){
         hits <- hitsNeigh[[consensus]]
@@ -471,7 +472,9 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
         nrDone <- nrDone+1
         
         if(!silent){
-          statusReport(nrDone, nrNeigh, " Computing scores", statusLength=20)
+          ## Don't report all computed scores
+          if((nrDone %% 10) == 0)
+            cat(".")
         }
       }
       if(!silent){
