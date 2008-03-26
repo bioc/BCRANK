@@ -6,7 +6,7 @@ int IUPACmatch[256][256];
 
 // Returns 1 if a nucleotide is matching an IUPAC symbol, 0 otherwise
 int match_DNA_and_IUPAC(char DNA, char IUPAC){
-  int match;
+  int match = 0;
   
   if(IUPAC == 'N'){
     return 1;
