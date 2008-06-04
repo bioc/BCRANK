@@ -290,7 +290,7 @@ getBCRANKNeighbours <- function(consensus){
 ######################## Cost function ####################################
 
 ## Computes the BCRANK score of a consensus sequence
-getBCRANKScore<-function(hitsVec, randOrder, consensus, nrPoints=25){
+getBCRANKScore<-function(hitsVec, randOrder, consensus, use.P1, use.P2, nrPoints=25){
   
   ## Given the observed hits and the random orderings, the function returns
   ## the differences between the observed hits and each of the random
@@ -334,7 +334,9 @@ getBCRANKScore<-function(hitsVec, randOrder, consensus, nrPoints=25){
   ## for random orderings using a t-test. 
   randDists <- getDeviationsFromRandom(hitsUnique, randOrder, nrPoints=nrPoints)
   tval <- abs(t.test(randDists,mu=0)$statistic)
-    
+
+  score <- tval
+  
   ## #######################
   ##
   ## Compute score penalties.
@@ -342,30 +344,38 @@ getBCRANKScore<-function(hitsVec, randOrder, consensus, nrPoints=25){
   ## #######################
   
   ## Compute P1 - Penalty on non-specific bases
-  
-  tmpConsensus <- trimNs(consensus)
 
-  tmpConsensus <- gsub("A","X",tmpConsensus)
-  tmpConsensus <- gsub("C","X",tmpConsensus)
-  tmpConsensus <- gsub("G","X",tmpConsensus)
-  tmpConsensus <- gsub("T","X",tmpConsensus)
+  if(use.P1){
+    
+    tmpConsensus <- trimNs(consensus)
 
-  nrSpecific <- length(which(gregexpr("X",tmpConsensus)[[1]]!=-1))
+    tmpConsensus <- gsub("A","X",tmpConsensus)
+    tmpConsensus <- gsub("C","X",tmpConsensus)
+    tmpConsensus <- gsub("G","X",tmpConsensus)
+    tmpConsensus <- gsub("T","X",tmpConsensus)
+    
+    nrSpecific <- length(which(gregexpr("X",tmpConsensus)[[1]]!=-1))
 
-  ## Avoid zero penalty for motifs with no A,C,G or T bases
-  if(nrSpecific == 0){
-    nrSpecific <- 0.5
+    ## Avoid zero penalty for motifs with no A,C,G or T bases
+    if(nrSpecific == 0){
+      nrSpecific <- 0.5
+    }
+
+    P1 <-  nrSpecific/nchar(tmpConsensus)
+
+    score <- score*P1
+
   }
-
-  P1 <-  nrSpecific/nchar(tmpConsensus)
     
   ## Compute P2 - Penalty on repetitive motifs
-  
-  nrMultipleHits <- length(which(hitsVec>1))
+  if(use.P2){
 
-  P2 <- 1-(nrMultipleHits/nrHits)
+    nrMultipleHits <- length(which(hitsVec>1))
 
-  score <- tval*P1*P2
+    P2 <- 1-(nrMultipleHits/nrHits)
+
+    score <- score*P2
+  }
   
   return(score)
 }
@@ -376,7 +386,7 @@ getBCRANKScore<-function(hitsVec, randOrder, consensus, nrPoints=25){
 ## Runs the BCRANK search on a fasta file containing ranked DNA regions starting from
 ## an initial consensus sequence. The nrRandom parameter specifies the number of random
 ## re-orderings performed to calculate scores. Returns a BCRANKsearch object
-bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, do.search=TRUE){
+bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, do.search=TRUE, use.P1=TRUE, use.P2=TRUE){
     
   nrSeqs <- length(seqs)
   seqLengths <- as.numeric(unlist(lapply(seqs,nchar)))
@@ -403,7 +413,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
   seenMotifs <- list()
   
   hits <- matchConsensus(seqs, motif=start, nrSeqs=nrSeqs, seqLengths=seqLengths)
-  score <- getBCRANKScore(hits,randOrder,start)
+  score <- getBCRANKScore(hits,randOrder,start, use.P1, use.P2)
 
   seenMotifs[[start]] <- score
     
@@ -456,7 +466,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
           score <- seenMotifs[[consensus]]
         }
         else{
-          score <- getBCRANKScore(hits,randOrder,consensus)
+          score <- getBCRANKScore(hits,randOrder,consensus,use.P1,use.P2)
           seenMotifs[[consensus]] <- score
         }
         
@@ -500,7 +510,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
 
 
 ## Runs the BCRANK algorithm.
-bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE){
+bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=TRUE, use.P2=TRUE){
     
   ## A list containing BCRANKsearch objects
   BCRANKsearchResults <- list()
@@ -516,7 +526,7 @@ bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings
   ## Multiple random search
   if(length(startguesses)==0){
     for(i in 1:restarts){
-      BCRANKsearchResults[[i]] <- bcrankRun(seqs, nrRandom=reorderings, start=getRandomInit(length),silent=silent, makePlot=plot.progress, do.search=do.search)
+      BCRANKsearchResults[[i]] <- bcrankRun(seqs, nrRandom=reorderings, start=getRandomInit(length),silent=silent, makePlot=plot.progress, do.search=do.search, use.P1=use.P1, use.P2=use.P2)
     }
   }
 
@@ -524,7 +534,7 @@ bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings
   else{
     restarts <- length(startguesses)
     for(i in 1:restarts){
-      BCRANKsearchResults[[i]] <- bcrankRun(seqs, nrRandom=reorderings, start=startguesses[i], silent=silent, makePlot=plot.progress, do.search=do.search)
+      BCRANKsearchResults[[i]] <- bcrankRun(seqs, nrRandom=reorderings, start=startguesses[i], silent=silent, makePlot=plot.progress, do.search=do.search, use.P1=use.P1, use.P2=use.P2)
     }
   }
 
