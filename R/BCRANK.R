@@ -510,7 +510,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
 
 
 ## Runs the BCRANK algorithm.
-bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=TRUE, use.P2=TRUE){
+bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=FALSE, use.P2=TRUE){
     
   ## A list containing BCRANKsearch objects
   BCRANKsearchResults <- list()

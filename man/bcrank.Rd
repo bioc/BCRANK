@@ -15,7 +15,7 @@
 \usage{
 bcrank(fafile, startguesses=c(), restarts=10, length=10,
        reorderings=500, silent=FALSE, plot.progress=FALSE,
-       do.search=TRUE, use.P1=TRUE, use.P2=TRUE)
+       do.search=TRUE, use.P1=FALSE, use.P2=TRUE)
 }
 
 \arguments{
@@ -31,8 +31,8 @@ bcrank(fafile, startguesses=c(), restarts=10, length=10,
   \item{plot.progress}{if TRUE, the progress is displayed in a plot.}
   \item{do.search}{if FALSE, no search is performed. In that case the
 	start guesses are assigned with scores and reported as results.}
-  \item{use.P1}{Use penalty for non-specific bases.}
-  \item{use.P2}{Use penalty for motifs matching repetitive sequences}
+  \item{use.P1}{Use penalty for bases other than A,C,G,T.}
+  \item{use.P2}{Use penalty for motifs matching repetitive sequences.}
 }
 
 \value{

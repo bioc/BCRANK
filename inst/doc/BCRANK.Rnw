@@ -84,7 +84,7 @@ To compute a score, $A$ is compared to what it would look like if the genomic re
 
 $D_j$ will be close to zero when the consensus occurrences are distributed as expected by random sampling. If on the other hand all $D_j$ are far off from zero, $c$ is biased towards some part of the list. Therefore the score is calculated as the t-statistic $T$ for the $D_j$ being drawn from a distribution centered around zero. Consensus sequences that are biased towards some part of the list will thus get high scores whereas consensuses with no bias will get low scores. Moreover, consensuses that are matching just a few regions will not get a high $T$ even if it is matching only among the top ranked regions. This is because there will be a high variation within the $D_j$ values which will result in a low $T$.
 \subsubsection{Penalties}
-The t-statistic gives consensus sequences that are biased towards some part of the list. But there may be other issues to take into account if the aim is to detect TFBS from ChIP-chip or ChIP-seq data. Therefore, \texttt{BCRANK} implements two penalties, $P1$ and $P2$, with values between 0 and 1. The final scoring function is defined as: $score = T \cdot P1 \cdot P2$.
+The t-statistic gives consensus sequences that are biased towards some part of the list. But there may be other issues to take into account if the aim is to detect TFBS from ChIP-chip or ChIP-seq data. Therefore, \texttt{BCRANK} implements two optional penalties, $P1$ and $P2$, with values between 0 and 1. The final scoring function is defined as: $score = T \cdot P1 \cdot P2$. If a penalty is not used it will be set to 1.
 \begin{itemize}
 \item $P1$ - Penalty on non-specific bases. Let $l$ be the length of the consensus sequence and $b$ the total number of fixed bases (A, C, G, T) in the sequence. If there are no fixed bases, $b$ is set to 0.5.  The penalty is then defined as $P1=b/l$.
 \item $P2$ - Penalty on repetitive motifs. Let $r_n, n \in {1,2}$ be the number of input DNA regions that contain at least $n$ occurrences of the consensus. Then $P2=1-(r_2/r_1)$. 
@@ -122,7 +122,7 @@ fastaFile <- system.file("Exfiles/USF1_small.fa", package="BCRANK")
 
 The \texttt{bcrank()} function call below runs the \texttt{BCRANK} algorithm on the example USF1 data set. The \texttt{set.seed()} call sets seed for the random number generator for reproducibility. \\\\
 \noindent{\texttt{> set.seed(0)}}\\
-\noindent{\texttt{> BCRANKout <- bcrank(fastaFile, restarts=25)}}\\ 
+\noindent{\texttt{> BCRANKout <- bcrank(fastaFile, restarts=25, use.P1=TRUE, use.P2=TRUE)}}\\ 
 
 \noindent{Since it takes some time to run the algorithm, results can instead be loaded from a previous run on a larger USF1 data set containing the top 5211 regions:} 
 
