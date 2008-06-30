@@ -250,17 +250,20 @@ hitsForNeighboursInC <- function(seqs, consensus, nrSeqs, seqLengths, silent){
 
   if(!silent){
     cat("Scanning sequences")
+    flush.console()
   }
   
   for(basePos in 1:consLength){
     if(!silent){
       cat(".")
+      flush.console()
     }
     hits <- append(hits,hitsForNeighboursByBase(seqs,consensus,basePos,nrSeqs,seqLengths))
   }
 
   if(!silent){
     cat("\n")
+    flush.console()
   }
   
   return(hits)
@@ -398,6 +401,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
     else{
       cat("\n**** Computing BCRANK score for",start,"on",nrSeqs,"regions ****\n")
     }
+    flush.console()
   }
   
   ## A list BCRANKmatch objects
@@ -442,6 +446,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
     if(do.search){
       if(!silent){
         cat("\nIteration ",iteration," - ",bestCons,": ",bestScore,"\n",sep="")
+        flush.console()
       }
       
       ## Add flanking N's to the current best consensus
@@ -457,6 +462,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
 
       if(!silent){
         cat("Computing scores")
+        flush.console()
       }
       
       for(consensus in names(hitsNeigh)){
@@ -483,12 +489,15 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
         
         if(!silent){
           ## Don't report all computed scores
-          if((nrDone %% 10) == 0)
+          if((nrDone %% 10) == 0){
             cat(".")
+            flush.console()
+          }
         }
       }
       if(!silent){
         cat("\n")
+        flush.console()
       }
     }
     ## Don't run the search
