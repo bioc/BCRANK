@@ -48,7 +48,7 @@ setMethod("toptable", "BCRANKresult", function(object, i=NULL){
     topConsensuses <- as.character(sapply(BCRANKsearches, function(x){ consensus(final(x)) }))
     topScores <- as.numeric(sapply(BCRANKsearches, function(x){ bcrankScore(final(x)) }))
 
-    return(data.frame("Consensus"=topConsensuses,"Scores"=topScores))
+    return(data.frame("Consensus"=topConsensuses,"Score"=topScores))
   }
   ## Returns the i'th search element in the toplist
   else{
