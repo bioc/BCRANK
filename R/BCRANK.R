@@ -131,7 +131,7 @@ createPWM <- function(seqs, consensus, matchRevComp=TRUE){
         seq <- seqs[i]
         for(j in 1:length(currentMatch)){
           posInRegion <- as.integer(currentMatch[j])
-          matchLength <- as.integer(currentMatch@match.length)[j]-1
+          matchLength <- attr(currentMatch,"match.length")[j]-1
 
           TBS <- as.character(substr(seq,posInRegion,posInRegion+matchLength))
 
