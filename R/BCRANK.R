@@ -91,7 +91,7 @@ seqFromFile <- function(fafile){
   }
 
   ## Read sequences using Biostings package
-  res <- try(readFASTA(fafile, strip.desc=TRUE), silent=TRUE)
+  res <- try(readFASTA(fafile), silent=TRUE)
 
   ## Report error
   if(class(res) == "try-error"){
