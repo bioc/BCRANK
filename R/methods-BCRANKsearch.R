@@ -168,7 +168,7 @@ setMethod("searchPath", "BCRANKsearch", function(object, i=NULL){
     pathConsensuses <- as.character(sapply(BCRANKmatches, function(x){ consensus(x) }))
     pathScores <- as.numeric(sapply(BCRANKmatches, function(x){ bcrankScore(x) }))
 
-    return(data.frame("Consensus"=pathConsensuses,"Scores"=pathScores))
+    return(data.frame("Consensus"=pathConsensuses,"Score"=pathScores))
   }
   ## Returns the i'th search element in the toplist
   else{
