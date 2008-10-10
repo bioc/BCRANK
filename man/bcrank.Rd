@@ -9,13 +9,14 @@
   sequences that are overrepresented in some part of the list. Starting
   from some initial consensus DNA sequence coded in IUPAC symbols, the
   method uses a heuristic search to improve the consensus until a local
-  optimum is found. 
+  optimum is found. Individual predicted binding sites can
+  be reported by the function \code{\link{matchingSites}}. 
 }
 
 \usage{
 bcrank(fafile, startguesses=c(), restarts=10, length=10,
        reorderings=500, silent=FALSE, plot.progress=FALSE,
-       do.search=TRUE, use.P1=FALSE, use.P2=TRUE)
+       do.search=TRUE, use.P1=FALSE, use.P2=TRUE, strip.desc=TRUE)
 }
 
 \arguments{
@@ -33,6 +34,8 @@ bcrank(fafile, startguesses=c(), restarts=10, length=10,
 	start guesses are assigned with scores and reported as results.}
   \item{use.P1}{Use penalty for bases other than A,C,G,T.}
   \item{use.P2}{Use penalty for motifs matching repetitive sequences.}
+  \item{strip.desc}{An argument used by the function \code{\link[Biostrings:readFASTA]{readFASTA()}}.
+	It specifies whether or not the ">" marking at the beginning of description lines should be removed.}
 }
 
 \value{
@@ -42,7 +45,7 @@ bcrank(fafile, startguesses=c(), restarts=10, length=10,
 \author{Adam Ameur, \email{adam.ameur@lcb.uu.se}}
 
 \seealso{
-  \code{\link[BCRANK:BCRANKresult-class]{BCRANKresult-class}}
+  \code{\link{matchingSites}}, \code{\link[BCRANK:BCRANKresult-class]{BCRANKresult-class}}
 }
 
 \examples{

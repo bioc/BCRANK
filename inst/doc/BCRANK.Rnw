@@ -44,7 +44,7 @@ initial short consensus sequence, typically selected at random. The score takes 
 account both the number of consensus occurrences and the rank of the genomic regions. 
 Then all consensus sequences in a neighborhood of the start guess are evaluated and the one 
 with highest score is kept as the starting point for the next iteration. 
-Once the algorithm finds a local optimum, the algorithm is terminated and the 
+When a local optimum is found, the algorithm is terminated and the 
 locally optimal consensus is reported as a result. In order to increase the 
 chance of detecting the globally optimal solution, the algorithm may be restarted
 several times using different random starting points. Alternatively, \texttt{BCRANK} 
@@ -52,13 +52,12 @@ can be used for assigning scores to previously established consensus sequences. 
 below describe in more detail how the neighborhood, scoring function and start guess are 
 implemented. 
 
-The main aim of \texttt{BCRANK} is to predict the sequences that are bound by TF, and not 
-necesarily to generate a perfect position weight matrix. Therefore \texttt{BCRANK} 
-implements two penalties to give relatively higher scores to consensus sequences that are 
-more likely to be bound by the TF. The effect of the penalties is that i) consensus 
-sequences contain as few redundant bases as possible (i.e not in ${A,C,G,T}$), 
-and ii) the consensus should not be frequently occurring as a repetitive element in the 
-input regions. 
+\texttt{BCRANK} can extend and shorten motifs and can therefore be used in situations 
+where the motif length is not known a priori. Moreover, \texttt{BCRANK} implements two 
+optional penalties that can give relatively higher scores some consensus sequences. The 
+effect of the penalties is that i) the consensus contains fewer redundant bases (i.e. other 
+bases than ${A,C,G,T}$), and ii) the consensus will not be frequently occurring as a repetitive 
+element in the enriched regions. 
 
 \subsection{Neighborhood}
 In BCRANK, all consensus sequences are represented by IUPAC nucleotide symbols. The neighborhood of one consensus sequence $s$ consists of all consensuses that can be generated from s by first adding one IUPAC letter N (representing any nucleotide) to either side of $s$ and then flipping any base to any other IUPAC symbol. Since there are 15 symbols in total, a sequence of length $l$ will have $14 \cdot (l+2)$ neighbors. After each search step any flanking Ns are removed from the highest scoring sequence in the neighborhood. The removal and additions of flanking Ns allows the algorithm to shorten and extend the predicted binding sites.
@@ -68,12 +67,12 @@ The score tells whether a given consensus sequence is overrepresented in some pa
 \begin{figure}[h]
   \center
   \includegraphics[height=4.2cm,width=7.7cm]{BCRANK_intro_fig1}
-  \caption{$A$-vectors for the two consensus sequences \texttt{CACGTGAC} (left) and \texttt{CAGGCTGG} (right). On the x-axis are the top 5211 regions from a whole genome ChIP-chip study on USF1 in human liver cells\cite{Rada08}, ranked by their enrichment signal. The aim of \texttt{BCRANK} is to detect sequences that are biased towards some part of the list. Therefore \texttt{CACGTGAC} will get a higher score than \texttt{CAGGCTGG} even though it has a lower number of total occorrences. It is important to have enough number of ranked input regions to \texttt{BCRANK}, so this bias is observed for the correct binding motif. The established USF1 binding sequence is \texttt{CACGTG}.}
+  \caption{$A$-vectors for the two consensus sequences \texttt{CACGTGAC} (left) and \texttt{CAGGCTGG} (right). On the x-axis are the top 5211 regions from a whole genome ChIP-chip study on USF1 in human liver cells\cite{Rada08}, ranked by their enrichment signal. The aim of \texttt{BCRANK} is to detect sequences that are biased towards some part of the list. Therefore \texttt{CACGTGAC} will get a higher score than \texttt{CAGGCTGG} even though it has a lower number of total occurrences. It is important to have enough number of ranked input regions to \texttt{BCRANK}, so this bias is observed for the correct binding motif. The established USF1 binding sequence is \texttt{CACGTG}.}
   \label{fig:intro1}
 \end{figure}
 
 
-To compute a score, $A$ is compared to what it would look like if the genomic regions were randomly ordered. Therefore a large number $R$ (the \texttt{reorderings} parameter to \texttt{bcrank()}) of random orderings of the input regions are generated, and a corresponding vector $A_j$ is computed for each re-ordering $1 \le j \le R$ as above. For each $j$, the difference $D_j$ between $A_j$ and $A$ is estimated by the area between $A$ and $A_j$ (see Figure~\ref{fig:intro2}). When calculating $D_j$, the $A$ and $A_j$ vectors are first scaled so they range between 0 and 1. 
+To compute a score, $A$ is compared to what it would look like if the genomic regions were randomly ordered. Therefore a large number $R$ (the \texttt{reorderings} parameter to \texttt{bcrank()}) of random orderings of the input regions are generated, and a corresponding vector $A_j$ is computed for each re-ordering $1 \le j \le R$ as above. For each $j$, the difference $D_j$ between $A_j$ and $A$ is estimated by the area between the corresponding lines (see Figure~\ref{fig:intro2}). When calculating $D_j$, the $A$ and $A_j$ vectors are first scaled so they range between 0 and 1. 
 \begin{figure}[h]
   \center
   \includegraphics[height=4.5cm,width=8.25cm]{BCRANK_intro_fig2}
@@ -98,7 +97,7 @@ In case the algorithm is used for ab inito search, the initial guess is a random
 \subsection{Additional information}
 Some other important details:
 \begin{itemize}
-\item{The algorithm is non-deterministic because of the random re-orderings when the score is calculated. This also implies that the same consensus sequence will get different \texttt{BCRANK} scores in the same data when run with different re-orderings. The variability in scores can be decreased by increasing the \texttt{reorderings} parameter}
+\item{The algorithm randomly re-orders the data when the score is calculated. This implies that the same consensus sequence will get different \texttt{BCRANK} scores in the same data when run with different re-orderings. The variability in scores can be decreased by increasing the \texttt{reorderings} parameter}
 \item{The algorithm performs a breadth-first search, meaning that the highest scoring neighbor in the neighborhood is selected in each search step.}
 \item{The algorithm keeps track of all consensus sequences that have already been tested so the same sequence is not visited twice when performing a search.}
 \end{itemize}
@@ -147,7 +146,7 @@ topMotif <- toptable(BCRANKout,1)
 topMotif
 @  
 
-\noindent{The \texttt{pwm()} function returns the position weight matrix for the search result. If \texttt{normalize} is set to \texttt{TRUE} each column will sum to \texttt{1}.
+\noindent{The \texttt{pwm()} function returns the position weight matrix for the search result. If \texttt{normalize} is set to \texttt{TRUE} each column will sum to \texttt{1}. The weight matrix can be viewed as a sequence logo by using the \texttt{seqLogo} Bioconductor package.
 
 <<viewBCRANKsearch>>=   
 weightMatrix <- pwm(topMotif, normalize=FALSE)
@@ -162,6 +161,21 @@ weightMatrix
 plot(topMotif)
 @
 \end{center}
+
+\subsubsection{Predicted binding sites}
+
+\noindent{Individual predicted binding sites can be reported by the \texttt{matchingSites} function.
+
+<<reportSites>>=   
+topConsensus <- as.character(toptable(BCRANKout)[1,"Consensus"])
+print(topConsensus)
+bindingSites <- matchingSites(fastaFile,topConsensus)
+nrSites <- nrow(bindingSites)
+cat("Number predicted binding sites:",nrSites,"\n")
+print(bindingSites[1:15,])
+@  
+
+As seen in the example above, some binding sites can be reported both on the sense and anti-sense strands.If the consensus is palindromic, duplicate enries can be avoided by setting the \texttt{revComp} argument in the \texttt{matchingSites()} call to \texttt{FALSE}.
 
 \bibliographystyle{plainnat}
 

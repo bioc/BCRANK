@@ -79,7 +79,7 @@ addNs <- function(consensus,n){
 }
 
 ## Reads sequences from a FASTA file and checks the file format..
-seqFromFile <- function(fafile){
+seqFromFile <- function(fafile, strip.desc){
 
   ## Are only allowed to contain A,C,G,T 
   checkSequences <- function(sequences){
@@ -89,10 +89,10 @@ seqFromFile <- function(fafile){
       stop(paste("Error. Other letters than A,C,G,T in sequence:",sequencesNotOK[1],"'",sep=""))
     }
   }
-
+  
   ## Read sequences using Biostings package
-  res <- try(readFASTA(fafile), silent=TRUE)
-
+  res <- try(readFASTA(fafile, strip.desc=strip.desc), silent=TRUE)
+  
   ## Report error
   if(class(res) == "try-error"){
     stop(paste("Error reading fasta file:",res))
@@ -519,13 +519,13 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
 
 
 ## Runs the BCRANK algorithm.
-bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=FALSE, use.P2=TRUE){
+bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=FALSE, use.P2=TRUE, strip.desc=TRUE){
     
   ## A list containing BCRANKsearch objects
   BCRANKsearchResults <- list()
   
   ## Read sequences from file
-  seqs <- seqFromFile(fafile)
+  seqs <- seqFromFile(fafile, strip.desc=strip.desc)
     
   ## Generates a random consensus sequence in IUPAC encoding.
   getRandomInit <- function(length=10){
@@ -554,3 +554,61 @@ bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings
   return(result)
 }
 
+
+
+################### Report macthing sites in a fasta file ############################
+matchingSites <- function(fafile, motifSequence, revComp=TRUE, strip.desc=TRUE){
+  
+  reportMatch <- function(match, seqs, strand){
+
+    siteInfo <- NULL
+    
+    for(i in 1:length(match)){
+      currentMatch <- match[[i]]
+      
+      if(currentMatch[1] > -1){
+        seqNr <- i
+        header <- names(seqs)[i]
+
+        seq <- seqs[i]
+        
+        for(j in 1:length(currentMatch)){
+          posStart <- as.integer(currentMatch[j])
+          matchLength <- attr(currentMatch,"match.length")[j]-1
+          posEnd <- as.integer(posStart+matchLength)
+
+          DNAseq <- as.character(substr(seq,posStart,posEnd))
+          
+          siteInfo <- rbind(siteInfo, c(header, seqNr, posStart, posEnd, strand, DNAseq))
+          
+        }
+      }
+    }
+    return(siteInfo)
+  }
+  
+  seqs <- seqFromFile(fafile, strip.desc=strip.desc)
+    
+  motifSequence <- iupacToCons(motifSequence)
+  tmpMatch <- gregexpr(motifSequence,seqs,perl=TRUE)
+  match <- reportMatch(tmpMatch, seqs, strand="+")
+  
+  if(revComp){
+    RCmotifSequence <- revComp(motifSequence)
+    tmpMatchRC <- gregexpr(RCmotifSequence,seqs,perl=TRUE)
+    rcMatch <- reportMatch(tmpMatchRC, seqs, strand="-")
+
+    match <- rbind(match,rcMatch)
+  }
+
+  match <- match[order(as.integer(match[,2])),]
+  
+  match[,2] <- paste("seq",match[,2],sep="")
+
+  match <- as.data.frame(match)
+  
+  colnames(match) <- c("Region header","Region nr","Start","End","Strand","Sequence")
+
+  return(match)
+
+}
