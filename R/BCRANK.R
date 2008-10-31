@@ -36,7 +36,7 @@ iupacToCons <- function(iupacString){
       return(paste("[",cons,"]",sep=""))
     }
   }
-
+  
   iupacByPos <- strsplit(iupacString,"")[[1]]
   cons <- ""
   for(i in 1:length(iupacByPos)){
@@ -159,7 +159,7 @@ createPWM <- function(seqs, consensus, matchRevComp=TRUE){
 
     return(allTBS)
   }
-    
+  
   motifLength <- nchar(consensus)
     
   motifSequence <- iupacToCons(consensus)
@@ -431,7 +431,7 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
     
     improvement <- FALSE
     iteration <- iteration+1
-        
+    
     searchPath[[iteration]] <- BCRANKmatch(as.character(bestCons),as.numeric(bestScore),as.numeric(bestHits))
     
     if(makePlot){

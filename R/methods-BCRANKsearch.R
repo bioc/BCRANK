@@ -15,14 +15,22 @@ setMethod("initialize", "BCRANKsearch",
               stop("finalNrMatch should have length 1")
             }
             
-            callNextMethod()
+            ##callNextMethod()
+
+            .Object@final <- final
+            .Object@finalPWM <- finalPWM
+            .Object@finalNrMatch <- finalNrMatch
+            .Object@searchPath <- searchPath
+            .Object@nrIterations <- nrIterations
+            .Object
+
+            
           })
 
 BCRANKsearch <- function(final, finalPWM, finalNrMatch, searchPath){
-
   nrIterations <- length(searchPath)
   
-  new("BCRANKsearch", final=final, finalPWM=finalPWM, finalNrMatch=finalNrMatch, nrIterations=nrIterations, searchPath=searchPath)
+  new("BCRANKsearch", final=final, finalPWM=finalPWM, finalNrMatch=finalNrMatch, searchPath=searchPath, nrIterations=nrIterations)
 }
 
 ######################################################
