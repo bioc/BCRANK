@@ -36,7 +36,7 @@ iupacToCons <- function(iupacString){
       return(paste("[",cons,"]",sep=""))
     }
   }
-
+  
   iupacByPos <- strsplit(iupacString,"")[[1]]
   cons <- ""
   for(i in 1:length(iupacByPos)){

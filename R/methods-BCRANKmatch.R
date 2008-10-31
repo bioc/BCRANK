@@ -8,20 +8,25 @@ setMethod("initialize", "BCRANKmatch",
                    consensus,
                    bcrankScore,
                    matchVec){
-
+            
             ## Check that consensus is in IUPAC coding
-            iupacMatch <- unlist(gregexpr("^[ACGTRYKMSWBVDHN]*$",consensus))[[1]]
-
-            if(iupacMatch@match.length < 0){
+            iupacMatch <- gregexpr("^[ACGTRYKMSWBVDHN]*$",consensus)[[1]]
+            
+            if(attr(iupacMatch,"match.length") < 0){
               stop(paste(consensus,"not in IUPAC coding."))
             }
+            
+            ##callNextMethod()
 
-            callNextMethod()
+            .Object@consensus <- consensus
+            .Object@bcrankScore <- bcrankScore
+            .Object@matchVec <- matchVec
+            .Object
             
           })
 
 BCRANKmatch <- function(consensus, bcrankScore, matchVec){
-    new("BCRANKmatch", consensus=consensus, bcrankScore=bcrankScore, matchVec=matchVec)
+  new("BCRANKmatch", consensus=consensus, bcrankScore=bcrankScore, matchVec=matchVec)
 }
 
 ######################################################

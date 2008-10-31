@@ -37,7 +37,6 @@ setMethod("restarts", "BCRANKresult", function(object){object@restarts})
 setMethod("toplist", "BCRANKresult", function(object){object@toplist})
 setMethod("fname", "BCRANKresult", function(object){object@fname})
 setMethod("funCall", "BCRANKresult", function(object){object@funCall})
-setMethod("toplist", "BCRANKresult", function(object){object@toplist})
 setMethod("nrSeqs", "BCRANKresult", function(object){object@nrSeqs})
 
 setMethod("toptable", "BCRANKresult", function(object, i=NULL){

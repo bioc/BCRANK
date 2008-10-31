@@ -19,10 +19,10 @@ setClass("BCRANKsearch",
                         finalPWM="matrix",
                         ## Total number of consensus occurences for the final BCRANKmatch
                         finalNrMatch="numeric",
-                        ## Number of iterations from start guess to final
-                        nrIterations="numeric",
                         ## A list of BCRANKmatch objects -- The whole search path 
-                        searchPath="list"))
+                        searchPath="list",
+                        ## Number of iterations from start guess to final
+                        nrIterations="numeric"))
 
 ## Class BCRANKresult
 setClass("BCRANKresult",
