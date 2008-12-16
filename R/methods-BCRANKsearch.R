@@ -121,7 +121,7 @@ setMethod("plot", signature(x="BCRANKsearch",y="missing"), function(x,y,...){
       }
       args[["x"]] <- cumsum(currentHits)
       args[["col"]] <- currentCol
-      do.call("plot", args)
+      do.call(plot, args)
       args[["cex.axis"]] <- NULL
       args[["cex.lab"]] <- NULL
       args[["xlab"]] <- NULL
@@ -132,7 +132,7 @@ setMethod("plot", signature(x="BCRANKsearch",y="missing"), function(x,y,...){
       args[["x"]] <- cumsum(currentHits)
       args[["y"]] <- NULL
       args[["col"]] <- currentCol
-      do.call("points",args)
+      do.call(points,args)
     }
   }
 
