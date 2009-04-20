@@ -1,6 +1,6 @@
 Package: BCRANK
 Title: Predicting binding site consensus from ranked DNA sequences
-Version: 1.5.2
+Version: 1.6.0
 Date: 2008-10-31
 Depends: methods
 Author: Adam Ameur <Adam.Ameur@lcb.uu.se>
