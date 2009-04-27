@@ -28,15 +28,17 @@ matchingSites(fafile, motifSequence, revComp=TRUE, strip.desc=TRUE)
   matching sites.
 }
 
-\author{Adam Ameur, \email{adam.ameur@lcb.uu.se}}
+\author{Adam Ameur, \email{adam.ameur@genpat.uu.se}}
 
 \seealso{
   \code{\link{bcrank}}
 }
 
 \references{
- Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius, C. Novel
- algorithm and ChIP-analysis identifies candidate functional SNPs. Submitted
+ Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius,
+ C. Identification of candidate regulatory SNPs by combination of
+ transcription factor binding site prediction, SNP genotyping and
+ haploChIP. Nucleic Acids Research, Accepted.
 }
 
 \keyword{methods}

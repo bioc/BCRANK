@@ -33,7 +33,7 @@
   }
 }
 
-\author{Adam Ameur, \email{adam.ameur@lcb.uu.se}}
+\author{Adam Ameur, \email{adam.ameur@genpat.uu.se}}
 
 \seealso{
   \code{\link[BCRANK:bcrank]{bcrank}},

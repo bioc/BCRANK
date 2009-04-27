@@ -20,7 +20,7 @@
 \title{BCRANK: predicting binding site consensus from ranked DNA sequences}
 
 \author{Adam Ameur\\
-  The Linnaeus Centre for Bioinformatics, Uppsala University, Sweden}
+  Uppsala University, Sweden}
 
 
 \date{\today}
@@ -32,7 +32,7 @@
 
 \section{Introduction}
 
-This document describes the \texttt{BCRANK} \texttt{R} package. \texttt{BCRANK}\cite{Ameur08} 
+This document describes the \texttt{BCRANK} \texttt{R} package. \texttt{BCRANK}\cite{Ameur09} 
 is a method that takes a ranked list of genomic regions as input and outputs short DNA sequences 
 that are overrepresented in some part of the list. The algorithm was developed 
 for detecting transcription factor (TF) binding sites in a large number of enriched 
@@ -181,8 +181,8 @@ As seen in the example above, some binding sites can be reported both on the sen
 
 \begin{thebibliography}{}
 
-\bibitem[1]{Ameur08}
- Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius, C.\begin{em} Novel algorithm and ChIP-analysis identifies candidate functional SNPs.\end{em} Submitted
+\bibitem[1]{Ameur09}
+ Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius, C.\begin{em} Identification of candidate regulatory SNPs by combination of transcription factor binding site prediction, SNP genotyping and haploChIP.\end{em} Nucleic Acids Research, Accepted.
 
 \bibitem[2]{Rada08}
 Rada-Iglesias, A., Ameur, A., Kapranov, P., Enroth, S., Komorowski, J., Gingeras, T. R., Wadelius, C.\begin{em} Whole-genome maps of USF1 and USF2 binding and histone H3 acetylation reveal new aspects of promoter structure and candidate genes for common human disorders.\end{em} Genome Res. 2008 Jan 29

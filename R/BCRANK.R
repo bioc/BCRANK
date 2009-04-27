@@ -5,7 +5,7 @@
 ##
 ## predicting binding site consensus from ranked DNA sequences
 ##
-## Author: Adam Ameur, The Linnaeus Centre for Bioinformatics, Uppsala, Sweden
+## Author: Adam Ameur, Uppsala Univ., Sweden
 ##
 ## Description: Implementation of an algorithm for detection of short DNA
 ##   sequences that are overrepresented in some part of the list. Starting from
