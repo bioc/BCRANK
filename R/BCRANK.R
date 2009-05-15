@@ -78,15 +78,15 @@ addNs <- function(consensus,n){
   return(consensus)
 }
 
-## Reads sequences from a FASTA file and checks the file format..
+## Reads sequences from a FASTA file and checks the file format.
 seqFromFile <- function(fafile, strip.desc){
 
-  ## Are only allowed to contain A,C,G,T 
+  ## Are only allowed to contain A,C,G,T
   checkSequences <- function(sequences){
-    sequenceMatch <- unlist(gregexpr("^[ACGT]*$",sequences))
+    sequenceMatch <- unlist(gregexpr("^[ACGTRYKMSWBDHVN]*$",sequences))
     sequencesNotOK <- headers[which(sequenceMatch != 1)] 
     if(length(sequencesNotOK)>0){
-      stop(paste("Error. Other letters than A,C,G,T in sequence:",sequencesNotOK[1],"'",sep=""))
+      stop(paste("A non IUPAC nucleutodide character found in sequence:",sequencesNotOK[1],"'\n Allowed letters are 'ACGTRYKMSWBDHVN'",sep=""))
     }
   }
   

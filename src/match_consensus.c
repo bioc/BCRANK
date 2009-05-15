@@ -14,17 +14,19 @@ int match_DNA_and_IUPAC(char DNA, char IUPAC){
   
   switch(DNA){
   case 'A':
-    match = (IUPAC == 'A' || IUPAC == 'M' || IUPAC == 'W' || IUPAC == 'R' || IUPAC == 'D' || IUPAC =='H' || IUPAC =='V');
-    break;
+	  match = (IUPAC == 'A' || IUPAC == 'M' || IUPAC == 'W' || IUPAC == 'R' || IUPAC == 'D' || IUPAC =='H' || IUPAC =='V');
+	  break;
   case 'C':
-    match = (IUPAC == 'C' || IUPAC == 'M' || IUPAC == 'S' || IUPAC == 'Y' || IUPAC == 'B' || IUPAC =='H' || IUPAC =='V');
-    break;
+	  match = (IUPAC == 'C' || IUPAC == 'M' || IUPAC == 'S' || IUPAC == 'Y' || IUPAC == 'B' || IUPAC =='H' || IUPAC =='V');
+	  break;
   case 'G':
-    match = (IUPAC == 'G' || IUPAC == 'R' || IUPAC == 'S' || IUPAC == 'K' || IUPAC == 'B' || IUPAC =='D' || IUPAC =='V');
-    break;
+	  match = (IUPAC == 'G' || IUPAC == 'R' || IUPAC == 'S' || IUPAC == 'K' || IUPAC == 'B' || IUPAC =='D' || IUPAC =='V');
+	  break;
   case 'T':
-    match = (IUPAC == 'T' || IUPAC == 'W' || IUPAC == 'K' || IUPAC == 'Y' || IUPAC == 'B' || IUPAC =='D' || IUPAC =='H');
-    break;
+	  match = (IUPAC == 'T' || IUPAC == 'W' || IUPAC == 'K' || IUPAC == 'Y' || IUPAC == 'B' || IUPAC =='D' || IUPAC =='H');
+	  break;
+  default:
+	  match = 0;
   }
 
   return match;
@@ -33,10 +35,11 @@ int match_DNA_and_IUPAC(char DNA, char IUPAC){
 
 void initIUPACmatch(){
 	int i,j;
-	char DNA[4] = {'A','C','G','T'};
+	//char DNA[4] = {'A','C','G','T'};
+	char DNA[15] = {'A','C','G','T','R','Y','K','M','S','W','B','D','H','V','N'};
 	char IUPAC[15] = {'A','C','G','T','R','Y','K','M','S','W','B','D','H','V','N'};
 
-	for(i=0; i<4; i++){
+	for(i=0; i<15; i++){
 		for(j=0; j<15; j++){
 			IUPACmatch[(int) DNA[i]][(int) IUPAC[j]] = match_DNA_and_IUPAC(DNA[i],IUPAC[j]);
 		}

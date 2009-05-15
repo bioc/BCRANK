@@ -19,9 +19,7 @@
 
 \title{BCRANK: predicting binding site consensus from ranked DNA sequences}
 
-\author{Adam Ameur\\
-  Uppsala University, Sweden}
-
+\author{Adam Ameur}
 
 \date{\today}
 
@@ -39,6 +37,15 @@ for detecting transcription factor (TF) binding sites in a large number of enric
 regions from high-throughput ChIP-chip or ChIP-seq experiments, but it 
 can be applied to any ranked list of DNA sequences. 
 
+\subsection{Input data}
+BCRANK takes a fasta file with DNA sequences as input:
+\begin{itemize}
+\item{The sequences in the file must be ordered, with the ones most likely to contain a TF binding sequence at the top.}
+\item{The sequences may be of varying lengths. Usually the average length is somewhere in the range between 50bp and 2kb.}
+\item{All IUPAC nucleotide symbols are allowed in the sequences, but positions with other letters than $(A,C,G,T)$ will not be considered in the motif search.}
+\end{itemize}
+
+\subsection{The algorithm}
 \texttt{BCRANK} uses a heuristic search strategy. First a score is computed for an 
 initial short consensus sequence, typically selected at random. The score takes into 
 account both the number of consensus occurrences and the rank of the genomic regions. 
@@ -59,10 +66,10 @@ effect of the penalties is that i) the consensus contains fewer redundant bases 
 bases than ${A,C,G,T}$), and ii) the consensus will not be frequently occurring as a repetitive 
 element in the enriched regions. 
 
-\subsection{Neighborhood}
+\subsubsection{Neighborhood}
 In BCRANK, all consensus sequences are represented by IUPAC nucleotide symbols. The neighborhood of one consensus sequence $s$ consists of all consensuses that can be generated from s by first adding one IUPAC letter N (representing any nucleotide) to either side of $s$ and then flipping any base to any other IUPAC symbol. Since there are 15 symbols in total, a sequence of length $l$ will have $14 \cdot (l+2)$ neighbors. After each search step any flanking Ns are removed from the highest scoring sequence in the neighborhood. The removal and additions of flanking Ns allows the algorithm to shorten and extend the predicted binding sites.
 
-\subsection{Scoring function}
+\subsubsection{Scoring function}
 The score tells whether a given consensus sequence is overrepresented in some part of the ranked list or not. Starting from $N$ ranked regions and a consensus sequence $c$, a binary vector of size $N$ is created, with 1 at position $i$ if $c$ is occurring in sequence number $i$, and 0 if not. The reverse complement of $c$ is also allowed to match. Then the cumulative sum of the match vector is computed and stored in a vector called $A$. The $A$-vector tells where in the ranked list most occurrences are located (see Figure~\ref{fig:intro1}).
 \begin{figure}[h]
   \center
@@ -82,14 +89,14 @@ To compute a score, $A$ is compared to what it would look like if the genomic re
 
 
 $D_j$ will be close to zero when the consensus occurrences are distributed as expected by random sampling. If on the other hand all $D_j$ are far off from zero, $c$ is biased towards some part of the list. Therefore the score is calculated as the t-statistic $T$ for the $D_j$ being drawn from a distribution centered around zero. Consensus sequences that are biased towards some part of the list will thus get high scores whereas consensuses with no bias will get low scores. Moreover, consensuses that are matching just a few regions will not get a high $T$ even if it is matching only among the top ranked regions. This is because there will be a high variation within the $D_j$ values which will result in a low $T$.
-\subsubsection{Penalties}
+\subsubsection*{Penalties}
 The t-statistic gives consensus sequences that are biased towards some part of the list. But there may be other issues to take into account if the aim is to detect TFBS from ChIP-chip or ChIP-seq data. Therefore, \texttt{BCRANK} implements two optional penalties, $P1$ and $P2$, with values between 0 and 1. The final scoring function is defined as: $score = T \cdot P1 \cdot P2$. If a penalty is not used it will be set to 1.
 \begin{itemize}
 \item $P1$ - Penalty on non-specific bases. Let $l$ be the length of the consensus sequence and $b$ the total number of fixed bases (A, C, G, T) in the sequence. If there are no fixed bases, $b$ is set to 0.5.  The penalty is then defined as $P1=b/l$.
 \item $P2$ - Penalty on repetitive motifs. Let $r_n, n \in {1,2}$ be the number of input DNA regions that contain at least $n$ occurrences of the consensus. Then $P2=1-(r_2/r_1)$. 
 \end{itemize}
 
-\subsection{Start guess}
+\subsubsection{Start guess}
 In case the algorithm is used for ab inito search, the initial guess is a randomly generated consensus of a specified length (the \texttt{length} parameter to \texttt{bcrank()}), with 10 bases as default. Multiple restarts with different random start guesses are usually required to increase the chance of finding the globally optimal solution. The number of restarts is determined by the \texttt{restarts} parameter.
 
 \texttt{BCRANK} can also use start guesses passed to \texttt{bcrank()} by the \texttt{startguesses} parameter. By setting the \texttt{do.search} parameter to \texttt{FALSE}, \texttt{BCRANK} assigns scores for the given start guesses without performing any search. 
@@ -102,6 +109,8 @@ Some other important details:
 \item{The algorithm keeps track of all consensus sequences that have already been tested so the same sequence is not visited twice when performing a search.}
 \end{itemize}
 
+\subsection{Citation}
+To cite \texttt{BCRANK}, please use (Ameur et al, 2009), see Reference \cite{Ameur09}.  
 \newpage
 
 \section{BCRANK - An example run}
@@ -139,25 +148,35 @@ BCRANKout
 
 \subsubsection{The \texttt{BCRANKsearch} object}
 
-\noindent{Use the \texttt{toptable()} function to access information about each motif found by \texttt{bcrank}. It returns an object of type \texttt{BCRANKsearch}:}
+\noindent{Use the \texttt{toptable()} function to access information about each motif found by \texttt{bcrank}. It returns an object of type \texttt{BCRANKsearch}:}. Here we extract the top scoring motif:
 
-<<viewBCRANKsearch>>=   
+<<viewTopMotif>>=   
 topMotif <- toptable(BCRANKout,1)
 topMotif
 @  
 
-\noindent{The \texttt{pwm()} function returns the position weight matrix for the search result. If \texttt{normalize} is set to \texttt{TRUE} each column will sum to \texttt{1}. The weight matrix can be viewed as a sequence logo by using the \texttt{seqLogo} Bioconductor package.
-
-<<viewBCRANKsearch>>=   
+\noindent{The \texttt{pwm()} function returns the position weight matrix for the search result. If \texttt{normalize} is set to \texttt{TRUE} each column will sum to \texttt{1}. 
+  
+<<viewWM>>=   
 weightMatrix <- pwm(topMotif, normalize=FALSE)
 weightMatrix
 @  
+
+\noindent{A weight matrix can be viewed as a sequence logo by using the \texttt{seqLogo} package. Make sure that that the pwm is normalized before running the \texttt{seqLogo()} function.
+
+\begin{center}
+<<label=fig1, fig=TRUE>>=
+weightMatrixNormalized <- pwm(topMotif, normalize=TRUE)
+library(seqLogo)
+seqLogo(weightMatrixNormalized)
+@ 
+\end{center}
 
 \noindent{The search path can be visualized. For each consensus in the search path, the number of occurences among the ranked regions are plotted. As seen in the figure, \texttt{BCRANK} searches for consensus sequences that don't give straight lines.}
 
 
 \begin{center}
-<<label=fig1,fig=TRUE>>=
+<<label=fig2, fig=TRUE>>=
 plot(topMotif)
 @
 \end{center}
@@ -175,7 +194,7 @@ cat("Number predicted binding sites:",nrSites,"\n")
 print(bindingSites[1:15,])
 @  
 
-As seen in the example above, some binding sites can be reported both on the sense and anti-sense strands.If the consensus is palindromic, duplicate enries can be avoided by setting the \texttt{revComp} argument in the \texttt{matchingSites()} call to \texttt{FALSE}.
+\noindent{As seen in the example above, some binding sites can be reported both on the sense and anti-sense strands. If the consensus is palindromic, duplicate enries can be avoided by setting the \texttt{revComp} argument in the \texttt{matchingSites()} call to \texttt{FALSE}.}
 
 \bibliographystyle{plainnat}
 
