@@ -25,8 +25,14 @@
     \item{\code{searchPath}:}{a collection of \code{BCRANKmatch-class}
 	  objects, ontaining all bcrank search steps from a start guess to a
 	  locally optimal solution.}
-	\item{\code{finalPWM}:}{position weight matrix containing all DNA
-	  sites for the highest scoring consensus in this bcrank run.}
+	\item{\code{final}:}{a \code{BCRANKmatch-class} object for the
+	  highest scoring consensus sequence (locally optimal solution) in this bcrank run.}
+	\item{\code{finalPWM}:}{position weight matrix for the highest
+	  scoring consensus sequence.}
+	\item{\code{finalNrMatch}:}{number of occurrences of the final
+	  consensus sequence in the fasta input file.}
+	\item{\code{nrIterations}:}{number of iterations required to move
+	  from the start guess to the final soloution in this bcrank run.}
   }
 }
 

@@ -68,7 +68,7 @@ pwm(topMotif, normalize=FALSE)
  Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius,
  C. Identification of candidate regulatory SNPs by combination of
  transcription factor binding site prediction, SNP genotyping and
- haploChIP. Nucleic Acids Research, Accepted.
+ haploChIP. Nucleic Acids Res, 2009, 37(12):e85.
 }
 
 \keyword{methods}

@@ -110,7 +110,7 @@ Some other important details:
 \end{itemize}
 
 \subsection{Citation}
-To cite \texttt{BCRANK}, please use (Ameur et al, 2009), see Reference \cite{Ameur09}.  
+To cite \texttt{BCRANK}, please use (Ameur et al, 2009), see \cite{Ameur09} in the References section.  
 \newpage
 
 \section{BCRANK - An example run}
@@ -201,10 +201,10 @@ print(bindingSites[1:15,])
 \begin{thebibliography}{}
 
 \bibitem[1]{Ameur09}
- Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius, C.\begin{em} Identification of candidate regulatory SNPs by combination of transcription factor binding site prediction, SNP genotyping and haploChIP.\end{em} Nucleic Acids Research, Accepted.
+ Ameur, A., Rada-Iglesias, A., Komorowski, J., Wadelius, C.\begin{em} Identification of candidate regulatory SNPs by combination of transcription factor binding site prediction, SNP genotyping and haploChIP.\end{em} Nucleic Acids Res, 2009, 37(12):e85.
 
 \bibitem[2]{Rada08}
-Rada-Iglesias, A., Ameur, A., Kapranov, P., Enroth, S., Komorowski, J., Gingeras, T. R., Wadelius, C.\begin{em} Whole-genome maps of USF1 and USF2 binding and histone H3 acetylation reveal new aspects of promoter structure and candidate genes for common human disorders.\end{em} Genome Res. 2008 Jan 29
+Rada-Iglesias, A., Ameur, A., Kapranov, P., Enroth, S., Komorowski, J., Gingeras, T. R., Wadelius, C.\begin{em} Whole-genome maps of USF1 and USF2 binding and histone H3 acetylation reveal new aspects of promoter structure and candidate genes for common human disorders.\end{em} Genome Res, 2008, 18(3):380-92.
 
 
 \end{thebibliography}

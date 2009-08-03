@@ -20,7 +20,9 @@
 \section{Slots}{
   \describe{
     \item{\code{consensus}:}{consensus sequence in IUPAC coding}
-    \item{\code{bcrankScore}:}{bcrank  score for the consensus}
+    \item{\code{bcrankScore}:}{bcrank score for the consensus}
+	\item{\code{matchVec}:}{vector with 0's (no match) and 1's (match)
+	  of same length as the ranked DNA sequences}
   }
 }
 

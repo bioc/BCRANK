@@ -15,9 +15,13 @@
 
 \section{Slots}{
   \describe{
-    \item{\code{fname}:}{The name of the fasta file used for running bcrank.}
-    \item{\code{toplist}:}{A list of \code{BCRANKsearch-class} objects,
+    \item{\code{fname}:}{the name of the fasta file used for running bcrank.}
+    \item{\code{toplist}:}{a list of \code{BCRANKsearch-class} objects,
 	  ranked by their scores.}
+	\item{\code{funCall}:}{the function call that was made to bcrank.}
+	\item{\code{nrSeqs}:}{number of sequences in the fasta input file.}
+	\item{\code{restarts}:}{number of restarts used in the bcrank
+	  search.}
   }
 }
 
