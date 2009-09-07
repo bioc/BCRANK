@@ -8,10 +8,9 @@
 \title{Class "BCRANKresult"}
 
 \description{Holds the results from running
-  \code{\link[BCRANK:bcrank]{bcrank}. Contains a number of
-	\code{\link[BCRANK:BCRANKsearch-class]{BCRANKsearch-class}} object,
-	one for each restart of the bcrank search.}
-}
+  \code{\link[BCRANK:bcrank]{bcrank}}. Contains a number of
+  \code{\link[BCRANK:BCRANKsearch-class]{BCRANKsearch-class}} object,
+  one for each restart of the bcrank search.}
 
 \section{Slots}{
   \describe{
