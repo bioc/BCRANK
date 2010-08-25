@@ -1,7 +1,7 @@
 Package: BCRANK
 Title: Predicting binding site consensus from ranked DNA sequences
-Version: 1.11.0
-Date: 2009-09-07
+Version: 1.11.1
+Date: 2010-08-25
 Depends: methods
 Author: Adam Ameur <Adam.Ameur@genpat.uu.se>
 Description: Functions and classes for de novo prediction of transcription factor binding consensus by heuristic search

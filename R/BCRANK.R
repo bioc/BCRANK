@@ -100,6 +100,7 @@ seqFromFile <- function(fafile, strip.desc){
   
   seqs <- sapply(1:length(res), function(x){res[[x]]$seq})
   seqs <- trimWhiteSpace(seqs)
+  seqs <- toupper(seqs)
 
   headers <- lapply(1:length(res), function(x){res[[x]]$desc})
   
