@@ -16,4 +16,6 @@ Collate:	AllClasses.R
 			BCRANK.R
 Imports: Biostrings
 Suggests: seqLogo
-biocViews: SequenceMatching
+biocViews: MotifDiscovery, GeneRegulation
+
+
