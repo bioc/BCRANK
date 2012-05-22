@@ -1,6 +1,6 @@
 useDynLib(BCRANK)
 import(methods)
-importFrom(Biostrings,readFASTA)
+importFrom(Biostrings,readDNAStringSet)
 importFrom(graphics,plot)
 
 exportClasses(BCRANKmatch,

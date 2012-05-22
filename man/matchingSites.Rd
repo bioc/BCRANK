@@ -19,8 +19,7 @@ matchingSites(fafile, motifSequence, revComp=TRUE, strip.desc=TRUE)
   \item{motifSequence}{a character vector in IUPAC coding representing a
 	DNA sequence.}
   \item{revComp}{set to TRUE if the reverse complement also be matched.}
-  \item{strip.desc}{An argument used by the function \code{\link[Biostrings:readFASTA]{readFASTA()}}.
-	It specifies whether or not the ">" marking at the beginning of description lines should be removed.}
+  \item{strip.desc}{Ignored (always treated as TRUE).}
 }
 
 \value{

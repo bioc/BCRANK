@@ -34,8 +34,7 @@ bcrank(fafile, startguesses=c(), restarts=10, length=10,
 	start guesses are assigned with scores and reported as results.}
   \item{use.P1}{Use penalty for bases other than A,C,G,T.}
   \item{use.P2}{Use penalty for motifs matching repetitive sequences.}
-  \item{strip.desc}{An argument used by the function \code{\link[Biostrings:readFASTA]{readFASTA()}}.
-	It specifies whether or not the ">" marking at the beginning of description lines should be removed.}
+  \item{strip.desc}{Ignored (always treated as TRUE).}
 }
 
 \value{

@@ -79,36 +79,18 @@ addNs <- function(consensus,n){
 }
 
 ## Reads sequences from a FASTA file and checks the file format.
-seqFromFile <- function(fafile, strip.desc){
+seqFromFile <- function(fafile){
 
-  ## Are only allowed to contain A,C,G,T
-  checkSequences <- function(sequences){
-    sequenceMatch <- unlist(gregexpr("^[ACGTRYKMSWBDHVN]*$",sequences))
-    sequencesNotOK <- headers[which(sequenceMatch != 1)] 
-    if(length(sequencesNotOK)>0){
-      stop(paste("A non IUPAC nucleutodide character found in sequence:",sequencesNotOK[1],"'\n Allowed letters are 'ACGTRYKMSWBDHVN'",sep=""))
-    }
-  }
-  
   ## Read sequences using Biostings package
-  res <- try(readFASTA(fafile, strip.desc=strip.desc), silent=TRUE)
+  seqs <- try(readDNAStringSet(fafile), silent=TRUE)
   
   ## Report error
-  if(class(res) == "try-error"){
-    stop(paste("Error reading fasta file:",res))
+  if(class(seqs) == "try-error"){
+    stop(paste("Error reading fasta file:",fafile))
   }
   
-  seqs <- sapply(1:length(res), function(x){res[[x]]$seq})
-  seqs <- trimWhiteSpace(seqs)
-  seqs <- toupper(seqs)
+  seqs <- as.character(seqs)
 
-  headers <- lapply(1:length(res), function(x){res[[x]]$desc})
-  
-  names(seqs) <- headers
-
-  ## Check for errors in DNA sequences
-  checkSequences(seqs)
-  
   return(seqs)
 }
 
@@ -522,11 +504,14 @@ bcrankRun <- function(seqs, start, nrRandom=500, silent=FALSE, makePlot=FALSE, d
 ## Runs the BCRANK algorithm.
 bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings=500, silent=FALSE, plot.progress=FALSE, do.search=TRUE, use.P1=FALSE, use.P2=TRUE, strip.desc=TRUE){
     
+  if (!identical(strip.desc, TRUE))
+      warning("'strip.desc' argument is ignored")
+
   ## A list containing BCRANKsearch objects
   BCRANKsearchResults <- list()
   
   ## Read sequences from file
-  seqs <- seqFromFile(fafile, strip.desc=strip.desc)
+  seqs <- seqFromFile(fafile)
     
   ## Generates a random consensus sequence in IUPAC encoding.
   getRandomInit <- function(length=10){
@@ -560,6 +545,9 @@ bcrank <- function(fafile, startguesses=c(), restarts=10, length=10, reorderings
 ################### Report macthing sites in a fasta file ############################
 matchingSites <- function(fafile, motifSequence, revComp=TRUE, strip.desc=TRUE){
   
+  if (!identical(strip.desc, TRUE))
+      warning("'strip.desc' argument is ignored")
+
   reportMatch <- function(match, seqs, strand){
 
     siteInfo <- NULL
@@ -588,7 +576,7 @@ matchingSites <- function(fafile, motifSequence, revComp=TRUE, strip.desc=TRUE){
     return(siteInfo)
   }
   
-  seqs <- seqFromFile(fafile, strip.desc=strip.desc)
+  seqs <- seqFromFile(fafile)
     
   motifSequence <- iupacToCons(motifSequence)
   tmpMatch <- gregexpr(motifSequence,seqs,perl=TRUE)
